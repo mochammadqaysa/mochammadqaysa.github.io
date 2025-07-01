@@ -1095,6 +1095,31 @@ a {
   /* box-shadow: 0px 0 35px 0 rgba(0, 0, 0, 0.08); */
 }
 
+
+.services .iconbox-green i {
+  color: #18d26e;
+}
+
+.services .iconbox-green:hover .icon i {
+  color: #fff;
+}
+
+.services .iconbox-green:hover .icon path {
+  fill: #18d26e;
+}
+
+.services .iconbox-black i {
+  color: #111;
+}
+
+.services .iconbox-black:hover .icon i {
+  color: #fff;
+}
+
+.services .iconbox-black:hover .icon path {
+  fill: #111;
+}
+
 .services .iconbox-blue i {
   color: #47aeff;
 }
