@@ -52,7 +52,7 @@ const MobileDock = () => {
                 items={items}
                 panelHeight={30}
                 baseItemSize={60}
-                magnification={100}
+                magnification={70}
             />
         </div>
     );
