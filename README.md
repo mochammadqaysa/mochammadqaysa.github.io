@@ -1,61 +1,66 @@
-# Portofolio Web — [Faris Edrik P / rissss21]
+# Portofolio Web — [Mochammad Qaysa Al-Haq]
 
 Selamat datang di portofolio web pribadi saya! 🌐  
-Dibuat dengan React + Vite, ini adalah showcase dari project, skill, dan karya yang ingin saya bagikan.
+Dibangun dengan React + Vite, project ini menjadi showcase dari karya, skill, dan project yang saya kerjakan.
 
-##  Struktur Project
+## 📂 Struktur Project
 
-- `public/` — file statis (favicon, assets, dsb.)  
-- `src/` — code utama React (komponen, utilitas, dsb.)  
-- `index.html` — entry point halaman web  
-- `package.json` & `package-lock.json` — manajemen dependencies dan script  
-- `vite.config.js` — konfigurasi build dan dev server Vite  
-- `eslint.config.js` — aturan linting agar kodenya tetap bersih dan konsisten  
+- `public/` — file statis (favicon, assets, dsb.)
+- `src/` — kode utama React (komponen, utilitas, dsb.)
+- `index.html` — entry point halaman web
+- `package.json` & `package-lock.json` — manajemen dependencies dan script
+- `vite.config.js` — konfigurasi build dan dev server Vite
+- `eslint.config.js` — aturan linting agar kode tetap konsisten
 
-##  Fitur Utama
+## 🚀 Fitur Utama
 
-- Dibangun dengan **React + Vite** — ringan, cepat reload, dan performa build optimal  
-- **ESLint** telah terkonfigurasi agar coding style tetap rapi  
-- Struktur modular dan siap dikembangkan—bisa ditambahkan halaman “About”, “Projects”, dsb.
+- **React + Vite** — performa cepat, ringan, dan optimal untuk development & production
+- **Hot Reload** untuk pengalaman coding lebih nyaman
+- Struktur modular & scalable — mudah dikembangkan (misalnya menambahkan halaman About, Projects, dsb.)
+- **ESLint** sudah dikonfigurasi agar codebase tetap bersih
 
-##  Cara Jalankan
+## 🛠️ Cara Menjalankan
 
-1. Clone repository ini:
+1. Clone repository:
+
 ```bash
-git clone https://github.com/rissss21/portofolio.git
-cd portofolio
-````
+git clone https://github.com/mochammadqaysa/mochammadqaysa.github.io.git
+cd portfolio
+```
 
 2. Install dependencies:
+
 ```bash
 npm install
-````
+```
 
 3. Jalankan server lokal dengan hot reload:
+
 ```bash
 npm run dev
-````
+```
 
-4. Buat versi production:
+4. Build untuk versi production:
+
 ```bash
 npm run build
-````
+```
 
-## &#x20;Quick Preview
+## 🌍 Quick Preview
 
-Jika sudah di-deploy (contoh: GitHub Pages, Netlify, Vercel), kamu bisa tambahkan link deploy di sini, misalnya:
-[🔗 Lihat versi live](https://username.github.io/portofolio/)
+Jika sudah di-deploy (misalnya ke GitHub Pages, Netlify, atau Vercel), tambahkan link di sini.  
+Contoh:  
+[🔗 Lihat versi live](https://mochammadqaysa.is-a.dev)
 
-## Tentang Saya
+## 👤 Tentang Saya
 
-Hai, saya Faris Edrik P (username GitHub: `rissss21`).
-Saya seorang Developer yang suka bikin aplikasi web ringan dengan tampilan modern dan performa tinggi. Scroll aja di project saya, dan jangan sungkan untuk reach out kalau ada pertanyaan!
+Halo, saya **Mochammad Qaysa Al-Haq**.  
+Seorang Web Developer yang suka membangun aplikasi web modern dengan performa tinggi dan desain yang clean. Silakan jelajahi project saya, dan jangan ragu untuk menghubungi saya bila ada pertanyaan atau kolaborasi!
 
-* **Email:** [email\_farisedrik21@gmail.com](mailto:email_farisedrik21@gmail.com)
-* **LinkedIn:** [linkedin.com/in/farisedp](https://www.linkedin.com/in/farisedp/)
-* **Instagram (opsional):** @farisedrikprayoga
+- **Email:** [qaysa78@gmail.com](mailto:qaysa78@gmail.com)
+- **LinkedIn:** [linkedin.com/in/mochammadqaysaalhaq](https://www.linkedin.com/in/mochammadqaysaalhaq/)
+- **Instagram:** [@mochammadqaysa](https://instagram.com/mochammadqaysa)
 
 ---
 
-
-[1]: https://github.com/rissss21/portofolio "GitHub - rissss21/portofolio"
+[1]: https://github.com/mochammadqaysa/mochammadqaysa.github.io "GitHub - mochammadqaysa/mochammadqaysa.github.io"
