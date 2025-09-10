@@ -6,160 +6,252 @@ const Image = {
 
 export default Image;
 
-import Tools1 from "/assets/tools/vscode.png";
-import Tools2 from "/assets/tools/reactjs.png";
-import Tools3 from "/assets/tools/nextjs.png";
-import Tools4 from "/assets/tools/tailwind.png";
-import Tools5 from "/assets/tools/bootstrap.png";
-import Tools6 from "/assets/tools/js.png";
-import Tools7 from "/assets/tools/nodejs.png";
-import Tools8 from "/assets/tools/github.png";
-import Tools9 from "/assets/tools/ai.png";
-import Tools10 from "/assets/tools/canva.png";
-import Tools11 from "/assets/tools/figma.png";
-import Tools12 from "/assets/tools/kotlin.png";
-import Tools13 from "/assets/tools/firebase.png";
-import Tools14 from "/assets/tools/html.png";
-import Tools15 from "/assets/tools/css.png";
-import Tools16 from "/assets/tools/ts.png";
-import Tools17 from "/assets/tools/php.png";
-import Tools18 from "/assets/tools/vite.png";
-import Tools19 from "/assets/tools/mysql.png";
+import Android from "/assets/tools/android.png";
+import Ios from "/assets/tools/ios.png";
+import Flutter from "/assets/tools/flutter.png";
+import Laravel from "/assets/tools/laravel.png";
+import SpringBoot from "/assets/tools/spring.png";
+import NextJS from "/assets/tools/nextjs.png";
+import ReactJS from "/assets/tools/react.png";
+import NodeJS from "/assets/tools/nodejs.png";
+import ViteJS from "/assets/tools/vite.png";
+import JQuery from "/assets/tools/jquery.png";
+import Firebase from "/assets/tools/firebase.png";
 
+import Kotlin from "/assets/tools/kotlin.png";
+import Java from "/assets/tools/java.png";
+import Dart from "/assets/tools/dart.png";
+import PHP from "/assets/tools/php.png";
+import JavaScript from "/assets/tools/javascript.png";
+import Typescript from "/assets/tools/typescript.png";
+import Python from "/assets/tools/python.png";
+
+import HTML from "/assets/tools/html.png";
+import CSS from "/assets/tools/css.png";
+import Tailwind from "/assets/tools/tailwind.png";
+import Bootstrap from "/assets/tools/bootstrap.png";
+import Git from "/assets/tools/git.png";
+
+import AndroidStudio from "/assets/tools/androidstudio.png";
+import VSCode from "/assets/tools/vscode.png";
+import Intellij from "/assets/tools/intellij.png";
+
+import MySQL from "/assets/tools/mysql.png";
+import Postgre from "/assets/tools/postgre.png";
+
+import Figma from "/assets/tools/figma.png";
+import Canva from "/assets/tools/canva.png";
 
 export const listTools = [
   {
     id: 1,
-    gambar: Tools1,
-    nama: "Visual Studio Code",
-    ket: "Code Editor",
+    gambar: Android,
+    nama: "Android",
+    ket: "Platform",
     dad: "100",
   },
   {
     id: 2,
-    gambar: Tools2,
-    nama: "React JS",
-    ket: "Framework",
+    gambar: Ios,
+    nama: "iOS",
+    ket: "Platform",
     dad: "200",
   },
   {
     id: 3,
-    gambar: Tools3,
-    nama: "Next JS",
+    gambar: Flutter,
+    nama: "Flutter",
     ket: "Framework",
     dad: "300",
   },
   {
     id: 4,
-    gambar: Tools4,
-    nama: "Tailwind CSS",
+    gambar: Laravel,
+    nama: "Laravel",
     ket: "Framework",
     dad: "400",
   },
   {
     id: 5,
-    gambar: Tools5,
-    nama: "Bootstrap",
+    gambar: SpringBoot,
+    nama: "Spring Boot",
     ket: "Framework",
     dad: "500",
   },
   {
     id: 6,
-    gambar: Tools6,
-    nama: "Javascript",
-    ket: "Language",
+    gambar: NextJS,
+    nama: "Next JS",
+    ket: "Framework",
     dad: "600",
   },
   {
     id: 7,
-    gambar: Tools7,
-    nama: "Node JS",
-    ket: "Javascript Runtime",
+    gambar: ReactJS,
+    nama: "React JS",
+    ket: "Javascript Library",
     dad: "700",
   },
   {
     id: 8,
-    gambar: Tools8,
-    nama: "Github",
-    ket: "Repository",
+    gambar: NodeJS,
+    nama: "Node JS",
+    ket: "Javascript Runtime",
     dad: "800",
   },
   {
     id: 9,
-    gambar: Tools9,
-    nama: "Adobe Illustrator",
-    ket: "Design App",
+    gambar: ViteJS,
+    nama: "Vite",
+    ket: "Build Tool",
     dad: "900",
   },
   {
     id: 10,
-    gambar: Tools10,
-    nama: "Canva",
-    ket: "Design App",
+    gambar: JQuery,
+    nama: "jQuery",
+    ket: "Javascript Library",
     dad: "1000",
   },
   {
     id: 11,
-    gambar: Tools11,
-    nama: "Figma",
-    ket: "Design App",
+    gambar: Firebase,
+    nama: "Firebase",
+    ket: "Backend Platform",
     dad: "1100",
   },
   {
     id: 12,
-    gambar: Tools12,
+    gambar: Kotlin,
     nama: "Kotlin",
     ket: "Language",
     dad: "1200",
   },
   {
     id: 13,
-    gambar: Tools13,
-    nama: "Firebase",
-    ket: "Framework",
+    gambar: Java,
+    nama: "Java",
+    ket: "Language",
     dad: "1300",
   },
   {
     id: 14,
-    gambar: Tools14,
-    nama: "HTML",
+    gambar: Dart,
+    nama: "Dart",
     ket: "Language",
     dad: "1400",
   },
   {
     id: 15,
-    gambar: Tools15,
-    nama: "CSS",
+    gambar: PHP,
+    nama: "PHP",
     ket: "Language",
     dad: "1500",
   },
   {
     id: 16,
-    gambar: Tools16,
-    nama: "TypeScript",
+    gambar: JavaScript,
+    nama: "JavaScript",
     ket: "Language",
     dad: "1600",
   },
   {
     id: 17,
-    gambar: Tools17,
-    nama: "PHP",
+    gambar: Typescript,
+    nama: "Typescript",
     ket: "Language",
     dad: "1700",
   },
   {
     id: 18,
-    gambar: Tools18,
-    nama: "Vite",
-    ket: "Framework",
+    gambar: Python,
+    nama: "Python",
+    ket: "Language",
     dad: "1800",
   },
   {
     id: 19,
-    gambar: Tools19,
-    nama: "MySql",
-    ket: "Framework",
+    gambar: HTML,
+    nama: "HTML",
+    ket: "Markup Language",
     dad: "1900",
+  },
+  {
+    id: 20,
+    gambar: CSS,
+    nama: "CSS",
+    ket: "Style Sheet Language",
+    dad: "2000",
+  },
+  {
+    id: 21,
+    gambar: Tailwind,
+    nama: "Tailwind CSS",
+    ket: "CSS Framework",
+    dad: "2100",
+  },
+  {
+    id: 22,
+    gambar: Bootstrap,
+    nama: "Bootstrap",
+    ket: "CSS Framework",
+    dad: "2200",
+  },
+  {
+    id: 23,
+    gambar: Git,
+    nama: "Git",
+    ket: "Version Control System",
+    dad: "2300",
+  },
+  {
+    id: 24,
+    gambar: AndroidStudio,
+    nama: "Android Studio",
+    ket: "IDE",
+    dad: "2400",
+  },
+  {
+    id: 25,
+    gambar: VSCode,
+    nama: "Visual Studio Code",
+    ket: "IDE",
+    dad: "2500",
+  },
+  {
+    id: 26,
+    gambar: Intellij,
+    nama: "Intellij IDEA",
+    ket: "IDE",
+    dad: "2600",
+  },
+  {
+    id: 27,
+    gambar: MySQL,
+    nama: "MySQL",
+    ket: "Relational Database",
+    dad: "2700",
+  },
+  {
+    id: 28,
+    gambar: Postgre,
+    nama: "PostgreSQL",
+    ket: "Relational Database",
+    dad: "2800",
+  },
+  {
+    id: 29,
+    gambar: Figma,
+    nama: "Figma",
+    ket: "Design Tool",
+    dad: "2900",
+  },
+  {
+    id: 30,
+    gambar: Canva,
+    nama: "Canva",
+    ket: "Design Tool",
+    dad: "3000",
   },
 ];
 

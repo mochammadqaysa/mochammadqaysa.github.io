@@ -80,11 +80,10 @@ export default function ChatRoom() {
               />
             )}
             <div
-              className={`p-3 rounded-lg max-w-[75%] ${
-                msg.uid === user?.uid
+              className={`p-3 rounded-lg max-w-[75%] ${msg.uid === user?.uid
                   ? "bg-blue-500 text-white"
                   : "bg-gray-700 text-white"
-              }`}
+                }`}
             >
               <div className="text-xs opacity-70 mb-1">{msg.displayName}</div>
               <div>{msg.text}</div>

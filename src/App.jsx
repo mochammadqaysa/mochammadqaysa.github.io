@@ -187,7 +187,7 @@ function App() {
 
         </div>
 
-        <div className="tools mt-32">
+        <div className="tools mt-20">
           <h1 className="text-3xl/snug md:text-4xl/snug font-bold mb-1" data-aos="fade-up" data-aos-duration="1000" data-aos-once="true" >Tools & Technologies</h1>
           <p className="w-screen text-base/loose opacity-50 " data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300" data-aos-once="true">Tech Stack that i usually use</p>
           <div className="tools-box mt-14 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
@@ -220,7 +220,7 @@ function App() {
         {/* tentang */}
 
         {/* Proyek */}
-        <div className="proyek mt-32 py-10" id="project" data-aos="fade-up" data-aos-duration="1000" data-aos-once="true"></div>
+        <div className="proyek mt-10 py-10" id="project" data-aos="fade-up" data-aos-duration="1000" data-aos-once="true"></div>
         <h1 className="text-center text-4xl font-bold mb-2" data-aos="fade-up" data-aos-duration="1000" data-aos-once="true">Selected Project</h1>
         <p className="text-base/loose text-center opacity-50" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300" data-aos-once="true">A curated selection of my work, illustrating the intersection of skill, creativity, and a passion for digital innovation.</p>
 
@@ -244,18 +244,14 @@ function App() {
             />
           </div>
         </StarBorder>
-        <div className="proyek-box mt-14" >
-
-
-        </div>
         {/* Proyek */}
 
 
-        <div className="proyek mt-32 py-10" data-aos="fade-up" data-aos-duration="1000" data-aos-once="true"></div>
-        <h1 className="text-center text-4xl font-bold mb-2" data-aos="fade-up" data-aos-duration="1000" data-aos-once="true">Resume</h1>
+        <div className="proyek mt-10 py-10" data-aos="fade-up" data-aos-duration="1000" data-aos-once="true"></div>
+        <h1 id="resume" className="text-center text-4xl font-bold mb-2" data-aos="fade-up" data-aos-duration="1000" data-aos-once="true">Resume</h1>
         <p className="text-base/loose text-center opacity-50" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300" data-aos-once="true">Here is my educational background, professional experience, and personal projects.</p>
         <div className="mt-15 mx-auto w-full max-w-[1600px] rounded-3xl border-[5px] border-cyan-500/40 shadow-[0_0_30px_rgba(9,182,194,0.4)] bg-gradient-to-br from-[#0a0a0a] via-[#111111] to-[#1a1a1a] p-6">
-          <div id="resume" className="flex flex-col md:flex-row items-start justify-between gap-10 pt-0 px-8" data-aos="fade-up" data-aos-duration="1000" data-aos-once="true">
+          <div className="flex flex-col md:flex-row items-start justify-between gap-10 pt-0 px-8" data-aos="fade-up" data-aos-duration="1000" data-aos-once="true">
             <EducationTimeLine />
             <CareerTimeLine />
           </div>
@@ -292,7 +288,7 @@ function App() {
             {/* Contact Form di kanan */}
             <div className="flex-1">
               <form
-                action="https://formsubmit.co/rissoppa21@gmail.com"
+                action="https://formsubmit.co/qaysa78@gmail.com"
                 method="POST"
                 className="bg-zinc-800 p-10 w-full rounded-md"
                 autoComplete="off"
