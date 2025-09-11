@@ -263,6 +263,7 @@ import Proyek5 from "/assets/proyek/proyek5.png";
 import Proyek6 from "/assets/proyek/proyek6.png";
 import Proyek7 from "/assets/proyek/proyek7.png";
 import Proyek8 from "/assets/proyek/proyek8.png";
+import Proyek9 from "/assets/proyek/proyek9.png";
 
 export const listProyek = [
   {
@@ -337,8 +338,8 @@ export const listProyek = [
     title: "Molect MSA - Web",
     subtitle: "A web application used to monitor transactions, customer data, and AO activities, fully integrated with the Molect MSA mobile app.",
     fullDescription: "Molect MSA – Web is a web-based back-office system developed to support and extend the functionalities of the Molect MSA mobile application used by BPR Madani Sejahtera Abadi. This platform enables administrative staff to manage customer data, monitor field transactions, track Account Officer (AO) activities, and generate detailed financial and operational reports. Fully integrated with the Molect MSA mobile app, it ensures seamless real-time synchronization between in-field operations and centralized data management—enhancing transparency, accountability, and decision-making.",
-    borderColor: "#8AE8C6",
-    gradient: "linear-gradient(180deg, #8AE8C6, #000)",
+    borderColor: "#09B6C2",
+    gradient: "linear-gradient(180deg, #09B6C2, #000)",
     url: "https://molec.bprmsa.id/login",
     dad: "600",
   },
@@ -351,6 +352,17 @@ export const listProyek = [
     borderColor: "#8AE8C6",
     gradient: "linear-gradient(180deg, #8AE8C6, #000)",
     url: "https://layungperadilan.pn-balebandung.go.id/login",
+    dad: "600",
+  },
+  {
+    id: 9,
+    image: Proyek9,
+    title: "Personal Web Portfolio",
+    subtitle: "A personal web portfolio showcasing various projects and skills.",
+    fullDescription: "A web-based personal portfolio developed to showcase my skills, projects, and experiences. This portfolio serves as a digital resume, providing potential employers and clients with a comprehensive overview of my work and capabilities. By highlighting key projects and achievements, I aim to demonstrate my expertise and passion for web development.",
+    borderColor: "#09B6C2",
+    gradient: "linear-gradient(180deg, #09B6C2, #000)",
+    url: "https://mochammadqaysa.is-a.dev",
     dad: "600",
   },
 ];
