@@ -1,8 +1,8 @@
-import { db, Guestbook as GuestbookTable, eq, sql } from "astro:db";
 import type { APIRoute } from "astro";
 
 export const POST: APIRoute = async ({ request }) => {
   try {
+    const { db, Guestbook: GuestbookTable, eq, sql } = await import("astro:db");
     const data = await request.json();
     const rawId = Number(data?.id);
 
