@@ -12,7 +12,7 @@ import svelte from "@astrojs/svelte";
 
 import db from "@astrojs/db";
 
-const envSiteUrl = process.env.SITE_URL ?? "https://mochammadqaysa.is-a.dev/";
+const envSiteUrl = "https://mochammadqaysa.is-a.dev/";
 const site = envSiteUrl.endsWith("/") ? envSiteUrl : `${envSiteUrl}/`;
 const siteNoTrailingSlash = site.endsWith("/") ? site.slice(0, -1) : site;
 
@@ -59,7 +59,7 @@ export default defineConfig({
       },
     },
   ],
-  site,
+  site : site,
   integrations: [
     sitemap(),
     robotsTxt({
