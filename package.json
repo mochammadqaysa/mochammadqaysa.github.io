@@ -60,6 +60,9 @@
     "unocss": "^66.6.8"
   },
   "lint-staged": {
+    "src/**/*.{astro,ts,tsx,js,jsx,css,md}": [
+      "prettier --write"
+    ],
     "src/**/*.{js,astro}": [
       "eslint --fix"
     ]
