@@ -1,5 +1,7 @@
 # ⚡️ Mochammad Qaysa Al Haq - Personal Portfolio
 
+![Preview](https://raw.githubusercontent.com/mochammadqaysa/mochammadqaysa.github.io/main/public/preview.png)
+
 A modern, bento-style personal portfolio website built with Astro and Tailwind CSS. 
 This portfolio showcases my professional experiences, projects, technical skills, and includes a guestbook feature and customizable themes.
 
@@ -18,7 +20,7 @@ This portfolio showcases my professional experiences, projects, technical skills
 - **Framework**: [Astro](https://astro.build/)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **Animations**: CSS animations & [Motion](https://motion.dev/)
-- **Database**: Astro DB (Turso/LibSQL) for the Guestbook
+- **Database**: Firebase Firestore (for the Guestbook)
 - **Icons**: [Astro Icon](https://www.astroicon.dev/) & [Devicons](https://devicon.dev/)
 
 ## 📂 Project Structure
@@ -55,11 +57,12 @@ This portfolio showcases my professional experiences, projects, technical skills
    ```
 
 3. **Database Setup (Guestbook)**
-   This project uses Astro DB. To run locally with a fresh database schema:
-   ```bash
-   pnpm astro db push
-   ```
-   *Note: If you are connecting to a remote Turso DB, you will need to set `ASTRO_DB_REMOTE_URL` and `ASTRO_DB_APP_TOKEN` in your `.env` file.*
+   This project uses **Firebase Firestore** for the Guestbook feature. To set it up:
+   - Go to the [Firebase Console](https://console.firebase.google.com/) and create a new project.
+   - In your Firebase project, navigate to **Build > Firestore Database** and click **Create database**.
+   - Create a web app in your Project Settings and copy your Firebase SDK config.
+   - Add your Firebase configuration to your `.env` file or `src/firebase.js` as required.
+   - *Note: Don't forget to configure your Firestore Security Rules to secure your data.*
 
 4. **Start the development server**
    ```bash
