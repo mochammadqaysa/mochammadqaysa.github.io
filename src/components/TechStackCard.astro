@@ -1,0 +1,215 @@
+---
+import Card from "./Card/index.astro";
+
+const TECH_STACK = [
+  {
+    name: "Flutter",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg",
+  },
+  {
+    name: "Android",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-original.svg",
+  },
+  {
+    name: "Laravel",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/laravel/laravel-original.svg",
+  },
+  {
+    name: "Spring Boot",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg",
+  },
+  {
+    name: "Next.js",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
+  },
+  {
+    name: "React.js",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+  },
+  {
+    name: "Kotlin",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-original.svg",
+  },
+  {
+    name: "Java",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg",
+  },
+  {
+    name: "TypeScript",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+  },
+  {
+    name: "PHP",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg",
+  },
+  {
+    name: "Dart",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dart/dart-original.svg",
+  },
+  {
+    name: "Docker",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
+  },
+  {
+    name: "PostgreSQL",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
+  },
+  {
+    name: "MySQL",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg",
+  },
+  {
+    name: "Tailwind",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg",
+  },
+  {
+    name: "Redis",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg",
+  },
+  {
+    name: "Firebase",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg",
+  },
+  {
+    name: "Git",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg",
+  },
+];
+---
+
+<Card
+  colSpan="md:col-span-2"
+  rowSpan="md:row-span-1"
+  title="Tech Stack"
+  titlePadding="pt-2"
+>
+  <div
+    slot="background"
+    class="absolute inset-0 -z-10 overflow-hidden flex flex-col justify-center opacity-40 group-hover:opacity-80 transition-opacity duration-300"
+  >
+    <!-- fade edges -->
+    <div
+      class="absolute inset-y-0 left-0 w-10 z-10 bg-gradient-to-r from-darkslate-500 to-transparent pointer-events-none"
+    >
+    </div>
+    <div
+      class="absolute inset-y-0 right-0 w-10 z-10 bg-gradient-to-l from-darkslate-500 to-transparent pointer-events-none"
+    >
+    </div>
+
+    <div id="tech-marquee-track" class="flex w-max">
+      <!-- First set -->
+      <div class="flex items-center gap-8 md:gap-12 pr-8 md:pr-12">
+        {
+          TECH_STACK.map((tech) => (
+            <div class="flex flex-col items-center gap-3 group">
+              <img
+                src={tech.icon}
+                alt={tech.name}
+                class="w-10 h-10 object-contain transition-all duration-300"
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="text-xs text-neutral-500 dark:text-neutral-500 font-medium group-hover:text-white dark:group-hover:text-white transition-colors">
+                {tech.name}
+              </span>
+            </div>
+          ))
+        }
+      </div>
+      <!-- Duplicate set for seamless loop -->
+      <div
+        class="flex items-center gap-8 md:gap-12 pr-8 md:pr-12"
+        aria-hidden="true"
+      >
+        {
+          TECH_STACK.map((tech) => (
+            <div class="flex flex-col items-center gap-3 group">
+              <img
+                src={tech.icon}
+                alt={tech.name}
+                class="w-10 h-10 object-contain transition-all duration-300"
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="text-xs text-neutral-500 dark:text-neutral-500 font-medium group-hover:text-white dark:group-hover:text-white transition-colors">
+                {tech.name}
+              </span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</Card>
+
+<script>
+  function initTechMarquee() {
+    const el = document.getElementById("tech-marquee-track");
+
+    if (el) {
+      // Web Animations API — sama persis dengan referensi repo
+      const animation = el.animate(
+        [{ transform: "translateX(0)" }, { transform: "translateX(-50%)" }],
+        {
+          duration: 25000,
+          iterations: Infinity,
+          easing: "linear",
+        },
+      );
+
+      animation.play();
+
+      const cardEl = el.closest(".card") || el;
+
+      // Smooth decelerate saat hover (playbackRate → 0.3x, ease-out cubic)
+      cardEl.addEventListener("mouseenter", () => {
+        const targetRate = 0.3;
+        const startRate = animation.playbackRate;
+        const duration = 500; // ms
+        const startTime = performance.now();
+
+        const tick = (now: number) => {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          // Ease out cubic — identik dengan repo referensi
+          const ease = 1 - Math.pow(1 - progress, 3);
+          animation.playbackRate = startRate + (targetRate - startRate) * ease;
+          if (progress < 1) requestAnimationFrame(tick);
+        };
+
+        requestAnimationFrame(tick);
+      });
+
+      // Smooth accelerate kembali saat leave (playbackRate → 1x, ease-out cubic)
+      cardEl.addEventListener("mouseleave", () => {
+        const targetRate = 1;
+        const startRate = animation.playbackRate;
+        const duration = 500; // ms
+        const startTime = performance.now();
+
+        const tick = (now: number) => {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          // Ease out cubic — identik dengan repo referensi
+          const ease = 1 - Math.pow(1 - progress, 3);
+          animation.playbackRate = startRate + (targetRate - startRate) * ease;
+          if (progress < 1) requestAnimationFrame(tick);
+        };
+
+        requestAnimationFrame(tick);
+      });
+
+      // Cleanup saat Astro View Transitions
+      document.addEventListener(
+        "astro:before-swap",
+        () => {
+          animation.cancel();
+        },
+        { once: true },
+      );
+    }
+  }
+
+  document.addEventListener("astro:page-load", initTechMarquee);
+</script>

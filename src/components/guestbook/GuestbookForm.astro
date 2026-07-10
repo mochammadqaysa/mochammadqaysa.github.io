@@ -1,0 +1,285 @@
+---
+import { Icon } from "astro-icon/components";
+
+const inputClasses =
+  "w-full px-3 py-2 bg-darkslate-700 border border-darkslate-500 rounded-lg text-white text-sm placeholder:text-darkslate-400 focus:outline-none focus:border-primary-500/60 transition-colors";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<details
+  class:list={[
+    "group rounded-xl border border-darkslate-500 bg-darkslate-600/40 overflow-hidden",
+    className,
+  ]}
+>
+  <summary
+    class="flex items-center justify-between px-5 py-4 text-white hover:bg-darkslate-500/30 transition-colors cursor-pointer list-none"
+  >
+    <span class="text-sm font-medium">Leave a message</span>
+    <svg
+      class="w-4 h-4 text-darkslate-300 transition-transform duration-200 group-open:rotate-45"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M12 5v14M5 12h14"></path>
+    </svg>
+  </summary>
+
+  <div class="p-5 border-t border-darkslate-500 min-h-[140px] flex flex-col justify-center">
+    <!-- Unauthenticated State -->
+    <div id="unauth-state" class="flex flex-col items-center justify-center gap-4 py-4">
+      <button
+        id="login-btn"
+        type="button"
+        class="flex items-center gap-3 bg-white text-gray-800 px-5 py-2.5 rounded-full shadow hover:bg-gray-200 transition text-sm font-medium"
+      >
+        <img
+          src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+          alt="Google logo"
+          class="w-5 h-5"
+        />
+        Login with Google
+      </button>
+      <p class="text-sm text-darkslate-300">Login to leave a message in the guestbook</p>
+    </div>
+
+    <!-- Authenticated State (Form) -->
+    <form id="guestbook-form" class="hidden flex-col gap-3">
+      <div class="flex justify-between items-center mb-1">
+        <div class="flex items-center gap-2.5">
+          <img id="user-avatar" src="" alt="avatar" referrerpolicy="no-referrer" class="w-8 h-8 rounded-full object-cover border border-darkslate-400" />
+          <span id="user-name" class="text-white text-sm font-medium"></span>
+        </div>
+        <button
+          id="logout-btn"
+          type="button"
+          class="text-xs text-darkslate-300 hover:text-red-400 transition-colors"
+        >
+          Logout
+        </button>
+      </div>
+
+      <label>
+        <span class="sr-only">Message</span>
+        <textarea
+          name="message"
+          required
+          maxlength="1000"
+          rows="3"
+          class:list={[inputClasses, "resize-none"]}
+          placeholder="Say something..."></textarea>
+      </label>
+
+      <p id="form-error" class="text-red-400 text-xs hidden"></p>
+
+      <button
+        type="submit"
+        class="self-end px-5 py-2 bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Send
+      </button>
+    </form>
+  </div>
+</details>
+
+<script>
+  import { app, db } from "../../firebase";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
+  import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+  import {
+    avatarColorForSeed,
+    getInitials,
+    rotationFromSeed,
+    PIXEL_HEART_SVG,
+  } from "../../lib/guestbook";
+
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  const loginWithGoogle = async () => {
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (err) {
+      console.error("Login Error", err);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.error("Logout Error", err);
+    }
+  };
+
+  const GENERIC_ERROR_MESSAGE = "Failed to submit. Please try again.";
+
+  const escapeHtml = (untrustedText: string): string => {
+    const placeholder = document.createElement("div");
+    placeholder.textContent = untrustedText;
+    return placeholder.innerHTML;
+  };
+
+  const buildHeartButtonHtml = (): string =>
+    `<button type="button" data-heart-button data-heart-count="0" aria-label="Send love" title="Send love" class="heart-btn flex items-center gap-1 px-2 py-1 rounded-md text-darkslate-300 hover:text-white hover:bg-darkslate-400/30 transition-colors text-xs">${PIXEL_HEART_SVG}<span class="heart-count tabular-nums">0</span></button>`;
+
+  // Optimistic UI for new entry
+  const buildNewEntryCardHtml = (entry: any): string => {
+    const rotationDegrees = rotationFromSeed(entry.id);
+    const avatarColor = avatarColorForSeed(entry.id);
+    const avatarInitials = getInitials(entry.displayName);
+    const escapedName = escapeHtml(entry.displayName);
+    
+    let avatarMarkup = "";
+    if (entry.photoURL) {
+      avatarMarkup = `<img src="${escapeHtml(entry.photoURL)}" alt="${escapedName}" class="flex-shrink-0 w-7 h-7 rounded-full object-cover select-none border border-darkslate-400" loading="lazy" referrerpolicy="no-referrer" />`;
+    } else {
+      avatarMarkup = `<div class="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold select-none ${avatarColor}">${avatarInitials}</div>`;
+    }
+
+    return `
+      <article data-entry-id="${escapeHtml(entry.id)}" class="bg-darkslate-500 p-5 rounded-xl border border-darkslate-400 hover:border-primary-500/50 transition-[border-color,transform] duration-300 hover:rotate-0 flex flex-col gap-3" style="transform: rotate(${rotationDegrees}deg);">
+        <p class="text-darkslate-100 text-sm leading-relaxed whitespace-pre-wrap flex-1">${escapeHtml(entry.text)}</p>
+        <footer class="flex items-center gap-2.5 pt-2 border-t border-darkslate-400/50">
+          ${avatarMarkup}
+          <div class="min-w-0 flex-1 flex items-baseline gap-1.5 flex-wrap">
+            <span class="font-semibold text-white text-sm">${escapedName}</span>
+            <span class="text-darkslate-300 text-xs">just now</span>
+          </div>
+          ${buildHeartButtonHtml()}
+        </footer>
+      </article>`;
+  };
+
+  const prependEntryToGrid = (entry: any): void => {
+    const entriesGrid = document.getElementById("entries");
+    if (!entriesGrid) return;
+    entriesGrid.querySelector("[data-empty-state]")?.remove();
+    entriesGrid.insertAdjacentHTML("afterbegin", buildNewEntryCardHtml(entry));
+  };
+
+  const incrementEntriesCount = (): void => {
+    const entriesCountHeading = document.getElementById("entries-count");
+    if (!entriesCountHeading) return;
+    const nextCount = parseInt(entriesCountHeading.textContent ?? "0", 10) + 1;
+    entriesCountHeading.textContent = `${nextCount} messages`;
+  };
+
+  function setupAuthAndForm(): void {
+    if (document.body.dataset.guestbookFormInit === "1") return;
+    document.body.dataset.guestbookFormInit = "1";
+
+    let currentUser: any = null;
+
+    const unauthState = document.getElementById("unauth-state");
+    const authState = document.getElementById("guestbook-form") as HTMLFormElement;
+    const loginBtn = document.getElementById("login-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+    
+    const userAvatar = document.getElementById("user-avatar") as HTMLImageElement;
+    const userName = document.getElementById("user-name");
+    const errorElement = document.getElementById("form-error") as HTMLElement;
+    const submitBtn = authState?.querySelector("button[type=submit]") as HTMLButtonElement;
+
+    // Listen to Auth State
+    onAuthStateChanged(auth, (user: any) => {
+      currentUser = user;
+      if (user) {
+        // Authenticated
+        if (unauthState) unauthState.classList.add("hidden");
+        if (unauthState) unauthState.classList.remove("flex");
+        
+        if (authState) authState.classList.remove("hidden");
+        if (authState) authState.classList.add("flex");
+
+        if (userAvatar && user.photoURL) userAvatar.src = user.photoURL;
+        if (userName) userName.textContent = user.displayName || "User";
+      } else {
+        // Not Authenticated
+        if (unauthState) unauthState.classList.remove("hidden");
+        if (unauthState) unauthState.classList.add("flex");
+        
+        if (authState) authState.classList.add("hidden");
+        if (authState) authState.classList.remove("flex");
+      }
+    });
+
+    // Login
+    loginBtn?.addEventListener("click", async () => {
+      try {
+        await loginWithGoogle();
+      } catch (err) {
+        console.error("Login Error", err);
+      }
+    });
+
+    // Logout
+    logoutBtn?.addEventListener("click", async () => {
+      try {
+        await logout();
+      } catch (err) {
+        console.error("Logout Error", err);
+      }
+    });
+
+    // Submit Form
+    const showError = (msg: string | null) => {
+      if (!errorElement) return;
+      errorElement.textContent = msg || "";
+      errorElement.classList.toggle("hidden", !msg);
+    };
+
+    authState?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      showError(null);
+
+      const formData = new FormData(authState);
+      const message = (formData.get("message") ?? "").toString().trim();
+
+      if (!message || !currentUser) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending...";
+
+      try {
+        const docRef = await addDoc(collection(db, "messages"), {
+          text: message,
+          uid: currentUser.uid,
+          displayName: currentUser.displayName,
+          photoURL: currentUser.photoURL,
+          createdAt: serverTimestamp()
+        });
+
+        // Optimistic update
+        prependEntryToGrid({
+          id: docRef.id,
+          text: message,
+          displayName: currentUser.displayName,
+          photoURL: currentUser.photoURL
+        });
+        incrementEntriesCount();
+
+        authState.reset();
+        authState.closest("details")?.removeAttribute("open");
+      } catch (err) {
+        console.error("Error adding document: ", err);
+        showError(GENERIC_ERROR_MESSAGE);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Send";
+      }
+    });
+  }
+
+  document.addEventListener("astro:page-load", setupAuthAndForm);
+</script>

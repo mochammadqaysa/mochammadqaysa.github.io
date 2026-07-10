@@ -1,0 +1,251 @@
+---
+import Layout from "../layouts/Layout.astro";
+import LoaderAnimation from "../components/LoaderAnimation.astro";
+import BackLink from "../components/BackLink.astro";
+import DagoValleyExplore from "../assets/projects/dago_valley_explore.png";
+import Raharjo from "../assets/projects/raharjo.png";
+import MolectMsa from "../assets/projects/molect_msa.png";
+import MolectPodi from "../assets/projects/molect_pijer_podi.png";
+import DigdayaAuth from "../assets/projects/digdaya_auth.png";
+import InventoryTIP from "../assets/projects/inventory_tip.png";
+import LayungPeradilan from "../assets/projects/layung_peradilan.png";
+import KretekAsli from "../assets/projects/kretek_asli.png";
+import MolectMsaWeb from "../assets/projects/molect_msa_web.png";
+import MolectPodiWeb from "../assets/projects/molect_pijer_podi_web.png";
+import { Icon } from "astro-icon/components";
+import { SITE } from "../site-config";
+
+const projects = [
+  {
+    title: "Dago Valley Explore",
+    description:
+      "Cross-platform tourism exploration app running on Windows, Web, Android TV, and Samsung Tizen.",
+    href: "https://github.com/mochammadqaysa/dago_valley_explore",
+    tags: ["Flutter", "Dart", "Cross-Platform"],
+    image: DagoValleyExplore,
+    color: "#1a2a3a",
+  },
+  {
+    title: "BPDDIY - Raharjo",
+    description:
+      "Android cashier app with MVVM architecture, ESC/POS Bluetooth thermal printer integration, and GPS geolocation.",
+    href: "https://play.google.com/store/apps/details?id=com.bpddiy.raharjo&hl=id",
+    tags: ["Kotlin", "MVVM", "Bluetooth", "Android"],
+    image: Raharjo,
+    color: "#2a1a2e",
+  },
+  {
+    title: "Molect MSA Mobile",
+    description:
+      "Flutter mobile app for PT BPR MSA with geolocation tracking and ESC/POS Bluetooth printer support.",
+    href: "https://play.google.com/store/apps/details?id=com.dak.molec_msa&hl=id",
+    tags: ["Flutter", "Dart", "Bluetooth", "Android"],
+    image: MolectMsa,
+    color: "#0d1f2d",
+  },
+  {
+    title: "Molect Podi Mobile",
+    description:
+      "Flutter mobile app for Molect PODI with geolocator and Bluetooth ESC/POS thermal printer integration.",
+    href: "https://play.google.com/store/apps/details?id=com.dak.molecPijerPodi&hl=id",
+    tags: ["Flutter", "Dart", "Bluetooth", "Android"],
+    image: MolectPodi,
+    color: "#1a1a2e",
+  },
+  {
+    title: "Digdaya Authenticator",
+    description: "Android authenticator app developed for BPDDIY using Java.",
+    href: "https://play.google.com/store/apps/details?id=com.bpddiy.digdaya&hl=id",
+    tags: ["Java", "Android"],
+    image: DigdayaAuth,
+    color: "#2d1b00",
+  },
+  {
+    title: "TIP - IT Inventory",
+    description:
+      "Web-based IT asset inventory management system built with Laravel.",
+    href: "http://36.95.248.67",
+    tags: ["Laravel", "PHP", "MySQL"],
+    image: InventoryTIP,
+    color: "#0d2d1a",
+  },
+  {
+    title: "PN Bale Bandung - Layung Peradilan",
+    description:
+      "Public court information system for PN Bale Bandung, developed with Laravel.",
+    href: "https://layungperadilan.pn-balebandung.go.id/",
+    tags: ["Laravel", "PHP", "MySQL"],
+    image: LayungPeradilan,
+    color: "#1a0d2d",
+  },
+  {
+    title: "Kretek Asli Bandung",
+    description:
+      "Massage parlor scheduling app with client-side & admin booking, built with Laravel.",
+    href: "https://github.com/mochammadqaysa/kretek-asli",
+    tags: ["Laravel", "PHP", "MySQL"],
+    image: KretekAsli,
+    color: "#3d1a00",
+  },
+  {
+    title: "Molect PODI - Web",
+    description:
+      "Web management system for Molect PODI, developed with Laravel.",
+    href: "https://molectpodi.prodak.id/login",
+    tags: ["Laravel", "PHP", "MySQL"],
+    image: MolectPodiWeb,
+    color: "#2d1a0d",
+  },
+  {
+    title: "Molect MSA - Web",
+    description:
+      "Web management system for PT BPR MSA, a Laravel-based platform similar to Molect PODI.",
+    href: "https://molec.bprmsa.id/login",
+    tags: ["Laravel", "PHP", "MySQL"],
+    image: MolectMsaWeb,
+    color: "#0d2d2d",
+  },
+];
+---
+
+<LoaderAnimation />
+
+<Layout
+  title={`${SITE.author.fullName} - Projects`}
+  description="A collection of experiments and creative explorations with different technologies."
+>
+  <main
+    class="w-screen flex flex-col justify-start items-start max-w-3xl mx-auto p-8 text-white"
+  >
+    <BackLink href="/" class="mb-8" />
+    <h1 class="text-4xl font-bold mb-4 text-neutral-100">Projects</h1>
+    <div class="grid grid-cols-2 gap-4 w-full">
+      {
+        projects.map((project, i) => (
+          <a
+            href={project.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="project-card card col-span-2 md:col-span-1 group relative flex flex-col overflow-hidden rounded-xl border border-darkslate-400 transition-all duration-300 ease-out"
+          >
+            {/* Image area */}
+            <div
+              class="project-card__image w-full overflow-hidden relative"
+              style={`background-color: ${project.color};`}
+            >
+              {project.image ? (
+                <img
+                  src={project.image.src}
+                  alt={project.title}
+                  class="w-full h-full object-cover object-center scale-[1.02] transition-transform duration-500 group-hover:scale-[1.08]"
+                />
+              ) : (
+                <div class="project-card__placeholder w-full h-full flex items-center justify-center">
+                  <div class="placeholder-grid">
+                    {Array.from({ length: 12 }).map((_, gi) => (
+                      <div
+                        class="placeholder-dot"
+                        style={`animation-delay: ${gi * 0.08}s`}
+                      />
+                    ))}
+                  </div>
+                  <span class="placeholder-label text-[10px] tracking-[0.25em] uppercase font-medium opacity-30 absolute">
+                    {project.title}
+                  </span>
+                </div>
+              )}
+              {/* Gradient overlay blending image into card bottom */}
+              <div
+                class="project-card__gradient absolute inset-x-0 bottom-0 h-12 pointer-events-none"
+                style={`background: linear-gradient(to bottom, transparent, ${project.color === null ? "#171717" : "#171717"});`}
+              />
+            </div>
+
+            {/* Content area */}
+            <div class="flex flex-col gap-3 p-5 relative">
+              {/* Arrow icon */}
+              <Icon
+                class="h-4 w-4 absolute right-4 top-4 text-darkslate-300 group-hover:text-primary-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-150"
+                name="ri:arrow-right-up-line"
+              />
+
+              {/* Number badge */}
+              <span class="text-[10px] font-medium tabular-nums text-darkslate-400 tracking-widest">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+
+              <div>
+                <h2 class="font-semibold text-base leading-snug text-darkslate-50 pr-5">
+                  {project.title}
+                </h2>
+                <p class="text-darkslate-300 text-sm mt-1 leading-relaxed">
+                  {project.description}
+                </p>
+              </div>
+
+              <div class="flex flex-wrap gap-1.5 mt-0.5">
+                {project.tags.map((tag) => (
+                  <span class="text-[10px] font-medium px-2.5 py-0.5 rounded-full border border-darkslate-400 text-darkslate-300 group-hover:border-darkslate-300 transition-colors duration-200">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .project-card__image {
+    height: 180px;
+  }
+
+  .project-card__placeholder {
+    position: relative;
+    height: 100%;
+  }
+
+  .placeholder-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 16px;
+    padding: 24px;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+  }
+
+  .placeholder-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    animation: pulse-dot 2.4s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 0.15;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.55;
+      transform: scale(1.3);
+    }
+  }
+
+  .placeholder-label {
+    letter-spacing: 0.25em;
+    color: #fff;
+  }
+
+  .project-card {
+    cursor: pointer;
+    text-decoration: none;
+  }
+</style>

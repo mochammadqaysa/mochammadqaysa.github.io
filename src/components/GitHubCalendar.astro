@@ -1,0 +1,453 @@
+---
+import Card from "./Card/index.astro";
+
+interface Props {
+  username: string;
+  /** Card column span (Tailwind class). Default: "md:col-span-2" */
+  colSpan?: string;
+  /** Card row span (Tailwind class). Default: "md:row-span-2" */
+  rowSpan?: string;
+  /** Card inner padding. Default: "0" (no padding, managed internally) */
+  padding?: string;
+
+  // ── Grid sizing ─────────────────────────────────────────────────
+  /** Gap between cells in px. Default: 2 */
+  cellGap?: number;
+  /** Cell border-radius in px. Default: 2 */
+  cellRadius?: number;
+
+  // ── Font sizes (px) ─────────────────────────────────────────────
+  /** Font size of the contribution total header text. Default: 11 */
+  headerFontSize?: number;
+  /** Font size of the month labels (Jan, Feb …). Default: 10 */
+  monthFontSize?: number;
+  /** Font size of the day labels (Mon, Wed, Fri). Default: 9 */
+  dayFontSize?: number;
+  /** Font size of the footer link & legend labels. Default: 10 */
+  footerFontSize?: number;
+
+  // ── Spacing ─────────────────────────────────────────────────────
+  /** Padding inside the card wrapper (px). Default: 14 16 (top/bottom left/right) */
+  paddingX?: number;
+  /** Padding inside the card wrapper (px). Default: 14 */
+  paddingY?: number;
+
+  // ── Colors (CSS value or "theme" to follow --primary-500) ───────
+  /** Color of the zero-contribution cell background. Default: "#161b22" */
+  emptyColor?: string;
+  /** Muted text color for labels. Default: "#6b7280" */
+  mutedColor?: string;
+  /** Header text color. Default: "#9ca3af" */
+  labelColor?: string;
+}
+
+const {
+  username,
+  colSpan = "md:col-span-2",
+  rowSpan = "md:row-span-2",
+  padding = "p-0",
+  cellGap = 2,
+  cellRadius = 0,
+  headerFontSize = 11,
+  monthFontSize = 10,
+  dayFontSize = 9,
+  footerFontSize = 10,
+  paddingX = 16,
+  paddingY = 14,
+  emptyColor = "#161b22",
+  mutedColor = "#6b7280",
+  labelColor = "#9ca3af",
+} = Astro.props;
+
+// ── CSS variables string (forwarded via style="…") ────────────────
+const cssVars = [
+  `--gh-cell-gap: ${cellGap}px`,
+  `--gh-cell-radius: ${cellRadius}px`,
+  `--gh-header-fs: ${headerFontSize}px`,
+  `--gh-month-fs: ${monthFontSize}px`,
+  `--gh-day-fs: ${dayFontSize}px`,
+  `--gh-footer-fs: ${footerFontSize}px`,
+  `--gh-px: ${paddingX}px`,
+  `--gh-py: ${paddingY}px`,
+  `--gh-empty: ${emptyColor}`,
+  `--gh-muted: ${mutedColor}`,
+  `--gh-label: ${labelColor}`,
+].join("; ");
+
+// ── Data fetching ─────────────────────────────────────────────────
+interface ContributionDay {
+  date: string;
+  level: number;
+}
+
+let contributions: ContributionDay[] = [];
+let totalContributions = 0;
+
+try {
+  const res = await fetch(`https://github.com/users/${username}/contributions`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const html = await res.text();
+
+  const totalMatch = html.match(/([\d,]+)\s+contributions?\s+in/i);
+  if (totalMatch) {
+    totalContributions = parseInt(totalMatch[1].replace(/,/g, ""));
+  }
+
+  const tdRegex = /<td[^>]+>/g;
+  let m;
+  while ((m = tdRegex.exec(html)) !== null) {
+    const td = m[0];
+    const dateMatch = td.match(/data-date="(\d{4}-\d{2}-\d{2})"/);
+    const levelMatch = td.match(/data-level="(\d)"/);
+    if (dateMatch && levelMatch) {
+      contributions.push({
+        date: dateMatch[1],
+        level: parseInt(levelMatch[1]),
+      });
+    }
+  }
+  contributions.sort((a, b) => a.date.localeCompare(b.date));
+} catch (e) {
+  console.error("GitHub calendar fetch failed:", e);
+}
+
+// ── Build grid ───────────────────────────────────────────────────
+const monthNames = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+interface GridCell {
+  empty: boolean;
+  level: number;
+  date: string;
+}
+
+const gridCells: GridCell[] = [];
+const monthLabels: { label: string; col: number }[] = [];
+
+if (contributions.length > 0) {
+  const firstDate = new Date(contributions[0].date + "T00:00:00");
+  const padCount = firstDate.getDay();
+  for (let i = 0; i < padCount; i++) {
+    gridCells.push({ empty: true, level: 0, date: "" });
+  }
+  contributions.forEach((day) => {
+    gridCells.push({ empty: false, level: day.level, date: day.date });
+  });
+  if (totalContributions === 0) {
+    totalContributions = contributions.filter((d) => d.level > 0).length;
+  }
+}
+
+const totalWeeks = Math.ceil(gridCells.length / 7);
+
+if (gridCells.length > 0) {
+  let currentMonth = -1;
+  for (let col = 0; col < totalWeeks; col++) {
+    for (let row = 0; row < 7; row++) {
+      const idx = col * 7 + row;
+      if (idx < gridCells.length && !gridCells[idx].empty) {
+        const date = new Date(gridCells[idx].date + "T00:00:00");
+        const month = date.getMonth();
+        if (month !== currentMonth) {
+          monthLabels.push({ label: monthNames[month], col });
+          currentMonth = month;
+        }
+        break;
+      }
+    }
+  }
+}
+
+const currentYear = new Date().getFullYear();
+
+function fmtDate(dateStr: string): string {
+  const d = new Date(dateStr + "T00:00:00");
+  return d.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+---
+
+<Card {colSpan} {rowSpan} padding={padding}>
+  <div class="gh-wrapper" style={cssVars}>
+    {
+      contributions.length > 0 && (
+        <div class="gh-content">
+          {/* ── Header ── */}
+          <div class="gh-header">
+            <span class="gh-total">
+              <strong>{totalContributions.toLocaleString()}</strong>{" "}
+              contributions in {currentYear}
+            </span>
+          </div>
+
+          {/* ── Calendar ── */}
+          <div class="gh-calendar">
+            {/* Month labels */}
+            <div class="gh-months">
+              <div class="gh-day-spacer" />
+              <div class="gh-month-track" style={`--weeks: ${totalWeeks}`}>
+                {monthLabels.map((m) => (
+                  <span class="gh-month-label" style={`--col: ${m.col + 1}`}>
+                    {m.label}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Day labels + Grid */}
+            <div class="gh-body">
+              <div class="gh-day-labels">
+                <span />
+                <span>Mon</span>
+                <span />
+                <span>Wed</span>
+                <span />
+                <span>Fri</span>
+                <span />
+              </div>
+              <div class="gh-grid" style={`--weeks: ${totalWeeks}`}>
+                {gridCells.map((cell) =>
+                  cell.empty ? (
+                    <div class="gh-cell gh-empty" />
+                  ) : (
+                    <div
+                      class={`gh-cell gh-level-${cell.level}`}
+                      title={fmtDate(cell.date)}
+                    />
+                  ),
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* ── Footer ── */}
+          <div class="gh-footer">
+            <a
+              href={`https://github.com/${username}`}
+              target="_blank"
+              rel="noopener"
+              class="gh-link"
+            >
+              @{username}
+            </a>
+            <div class="gh-legend">
+              <span>Less</span>
+              <div class="gh-cell gh-level-0" />
+              <div class="gh-cell gh-level-1" />
+              <div class="gh-cell gh-level-2" />
+              <div class="gh-cell gh-level-3" />
+              <div class="gh-cell gh-level-4" />
+              <span>More</span>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    {
+      contributions.length === 0 && (
+        <div class="gh-fallback">
+          <p>Unable to load GitHub activity</p>
+          <a
+            href={`https://github.com/${username}`}
+            target="_blank"
+            rel="noopener"
+          >
+            View on GitHub →
+          </a>
+        </div>
+      )
+    }
+  </div>
+</Card>
+
+<style>
+  /* All sizes/colors come from CSS custom properties set inline on .gh-wrapper */
+
+  .gh-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .gh-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    height: 100%;
+    padding: var(--gh-py) var(--gh-px);
+  }
+
+  /* ── Header ── */
+  .gh-header {
+    display: flex;
+    align-items: center;
+  }
+  .gh-total {
+    font-size: var(--gh-header-fs);
+    color: var(--gh-label);
+  }
+  .gh-total strong {
+    color: #e5e7eb;
+    font-weight: 600;
+  }
+
+  /* ── Calendar ── */
+  .gh-calendar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gh-cell-gap);
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* Month labels */
+  .gh-months {
+    display: flex;
+    gap: var(--gh-cell-gap);
+  }
+  .gh-day-spacer {
+    width: 26px;
+    flex-shrink: 0;
+  }
+  .gh-month-track {
+    display: grid;
+    grid-template-columns: repeat(var(--weeks), 1fr);
+    flex: 1;
+  }
+  .gh-month-label {
+    grid-column-start: var(--col);
+    font-size: var(--gh-month-fs);
+    color: var(--gh-label);
+    white-space: nowrap;
+    line-height: 1;
+  }
+
+  /* Day labels + Grid */
+  .gh-body {
+    display: flex;
+    gap: var(--gh-cell-gap);
+    flex: 1;
+    min-height: 0;
+  }
+  .gh-day-labels {
+    display: grid;
+    grid-template-rows: repeat(7, 1fr);
+    gap: var(--gh-cell-gap);
+    width: 26px;
+    flex-shrink: 0;
+  }
+  .gh-day-labels span {
+    font-size: var(--gh-day-fs);
+    color: var(--gh-muted);
+    display: flex;
+    align-items: center;
+    line-height: 1;
+  }
+
+  .gh-grid {
+    display: grid;
+    grid-template-rows: repeat(7, 1fr);
+    grid-template-columns: repeat(var(--weeks), 1fr);
+    grid-auto-flow: column;
+    gap: var(--gh-cell-gap);
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* ── Cells ── */
+  .gh-cell {
+    aspect-ratio: 1;
+    border-radius: var(--gh-cell-radius);
+    min-width: 0;
+    min-height: 0;
+    transition: background 0.3s ease;
+  }
+  .gh-empty {
+    visibility: hidden;
+  }
+
+  /* Theme-responsive levels using --primary-500 */
+  .gh-level-0 {
+    background: var(--gh-empty);
+  }
+  .gh-level-1 {
+    background: color-mix(in srgb, var(--primary-500) 25%, var(--gh-empty));
+  }
+  .gh-level-2 {
+    background: color-mix(in srgb, var(--primary-500) 50%, var(--gh-empty));
+  }
+  .gh-level-3 {
+    background: color-mix(in srgb, var(--primary-500) 75%, var(--gh-empty));
+  }
+  .gh-level-4 {
+    background: var(--primary-500);
+  }
+
+  /* ── Footer ── */
+  .gh-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .gh-link {
+    font-size: var(--gh-footer-fs);
+    color: var(--gh-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .gh-link:hover {
+    color: var(--primary-500);
+  }
+
+  .gh-legend {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .gh-legend span {
+    font-size: var(--gh-footer-fs);
+    color: var(--gh-muted);
+    margin: 0 2px;
+  }
+  .gh-legend .gh-cell {
+    width: calc(var(--gh-footer-fs) + 2px);
+    height: calc(var(--gh-footer-fs) + 2px);
+    aspect-ratio: auto;
+  }
+
+  /* ── Fallback ── */
+  .gh-fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 8px;
+    color: var(--gh-muted);
+    font-size: 13px;
+  }
+  .gh-fallback a {
+    color: var(--primary-500);
+    text-decoration: none;
+    font-size: 12px;
+  }
+</style>
