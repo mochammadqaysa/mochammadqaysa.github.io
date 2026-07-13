@@ -3,29 +3,369 @@ import { formatDate } from "../lib/helpers";
 import BackLink from "../components/BackLink.astro";
 import BasicLayout from "./BasicLayout.astro";
 
+type HeroImage = { src: string; alt: string };
+
 type Props = {
   title: string;
   description: string;
   pubDate: Date;
   minutesRead: string;
   url: string;
+  ogImage?: string;
+  keywords?: string;
+  heroImages?: HeroImage[];
+  tags?: string[];
 };
 
-const { title, description, pubDate, minutesRead, url } = Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  minutesRead,
+  url,
+  ogImage,
+  keywords,
+  heroImages = [],
+  tags = [],
+} = Astro.props;
+const hasGallery = heroImages.length > 0;
 ---
 
-<BasicLayout description={description} page="blog" slug={url} title={title}>
-  <main class="mx-auto max-w-3xl w-full h-screen p-8 text-neutral-100">
-    <BackLink href="/blog" class="mb-8" />
-    <div class="my-10">
-      <h1 class="text-5xl font-semibold">{title}</h1>
-      <div class="flex justify-between pt-4 text-gray-500 text-sm">
-        <p>{formatDate(pubDate)}</p>
-        <p>{minutesRead}</p>
-      </div>
+<BasicLayout
+  description={description}
+  page="blog"
+  slug={url}
+  title={title}
+  ogImage={ogImage}
+  keywords={keywords}
+  pubDate={pubDate.toISOString()}
+>
+  <main
+    class="mx-auto max-w-3xl w-full min-h-screen px-6 pb-24 text-neutral-100"
+  >
+    <div class="pt-8 mb-6">
+      <BackLink href="/blog" />
     </div>
-    <article class="prose prose-p:text-red-500 prose-slate prose-invert">
+
+    <!-- Hero Image Gallery -->
+    {
+      hasGallery && (
+        <div class="gallery-scroll-wrap">
+          <div class="gallery-scroll-track">
+            {heroImages.map((img, i) => (
+              <div class="gallery-slide">
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  loading={i === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                />
+              </div>
+            ))}
+          </div>
+          <p class="gallery-hint">← Geser untuk melihat lebih →</p>
+        </div>
+      )
+    }
+
+    <!-- Post Header -->
+    <div class="mt-8 mb-8">
+      <h1 class="post-title">{title}</h1>
+      <div class="post-meta">
+        <span>{formatDate(pubDate)}</span>
+        <span>{minutesRead}</span>
+      </div>
+      {
+        tags.length > 0 && (
+          <div class="post-tags">
+            {tags.map((tag) => (
+              <span class="post-tag">{tag}</span>
+            ))}
+          </div>
+        )
+      }
+    </div>
+
+    <!-- Content -->
+    <article class="post-content">
       <slot />
     </article>
   </main>
 </BasicLayout>
+
+<style>
+  /* ── Gallery horizontal scroll ───────────────────── */
+  .gallery-scroll-wrap {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .gallery-scroll-track {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 12px;
+    /* Hide scrollbar visually but keep functional */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(99, 102, 241, 0.5) transparent;
+    border-radius: 16px;
+  }
+
+  .gallery-scroll-track::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .gallery-scroll-track::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .gallery-scroll-track::-webkit-scrollbar-thumb {
+    background: rgba(99, 102, 241, 0.5);
+    border-radius: 4px;
+  }
+
+  .gallery-slide {
+    flex: 0 0 85%;
+    scroll-snap-align: start;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    background: #0f172a;
+    transition: transform 0.2s ease;
+  }
+
+  .gallery-slide:hover {
+    transform: scale(1.01);
+  }
+
+  .gallery-slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  .gallery-hint {
+    text-align: center;
+    font-size: 0.72rem;
+    color: rgba(156, 163, 175, 0.6);
+    margin-top: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Post Header ─────────────────────────────────── */
+  .post-title {
+    font-size: clamp(1.6rem, 4vw, 2.25rem);
+    font-weight: 700;
+    line-height: 1.25;
+    color: #f1f5f9;
+    margin-bottom: 12px;
+  }
+
+  .post-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: #64748b;
+    padding-top: 4px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 14px;
+  }
+
+  .post-tag {
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 9999px;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    color: #94a3b8;
+    transition:
+      border-color 0.15s,
+      color 0.15s;
+    cursor: default;
+    line-height: 1.6;
+  }
+
+  .post-tag:hover {
+    border-color: var(--primary-500, #6366f1);
+    color: #fff;
+  }
+
+  /* ── Article prose ───────────────────────────────── */
+  .post-content {
+    color: #cbd5e1;
+    line-height: 1.8;
+    font-size: 1rem;
+  }
+
+  .post-content :global(h2) {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .post-content :global(h3) {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .post-content :global(p) {
+    margin-bottom: 1.1rem;
+    color: #cbd5e1;
+  }
+
+  .post-content :global(ul),
+  .post-content :global(ol) {
+    margin-left: 1.5rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .post-content :global(li) {
+    color: #cbd5e1;
+  }
+
+  .post-content :global(li::marker) {
+    color: #6366f1;
+  }
+
+  .post-content :global(a) {
+    color: #818cf8;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s;
+  }
+
+  .post-content :global(a:hover) {
+    color: #a5b4fc;
+  }
+
+  .post-content :global(strong) {
+    color: #f1f5f9;
+    font-weight: 700;
+  }
+
+  .post-content :global(hr) {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    margin: 2rem 0;
+  }
+
+  .post-content :global(blockquote) {
+    border-left: 3px solid #6366f1;
+    padding: 0.6rem 1rem;
+    margin: 1.5rem 0;
+    background: rgba(99, 102, 241, 0.07);
+    border-radius: 0 8px 8px 0;
+    color: #94a3b8;
+    font-style: italic;
+  }
+
+  .post-content :global(blockquote strong) {
+    color: #c7d2fe;
+    font-style: normal;
+  }
+
+  /* ── CTA & Referral (HTML in markdown) ───────────── */
+  .post-content :global(.blog-cta-wrapper) {
+    margin: 2.5rem 0;
+    text-align: center;
+  }
+
+  .post-content :global(.blog-cta-btn) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: #fff !important;
+    font-size: 1.05rem;
+    font-weight: 700;
+    padding: 16px 36px;
+    border-radius: 50px;
+    text-decoration: none !important;
+    letter-spacing: 0.02em;
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.45);
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .post-content :global(.blog-cta-btn:hover) {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 14px 40px rgba(99, 102, 241, 0.65);
+    text-decoration: none !important;
+    color: #fff !important;
+  }
+
+  .post-content :global(.blog-cta-note) {
+    margin-top: 10px;
+    font-size: 0.75rem;
+    color: #6b7280;
+  }
+
+  .post-content :global(.blog-referral-box) {
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.1),
+      rgba(124, 58, 237, 0.07)
+    );
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 2rem 0;
+  }
+
+  .post-content :global(.ref-label) {
+    font-size: 0.72rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #6b7280 !important;
+    margin-bottom: 4px !important;
+  }
+
+  .post-content :global(.blog-referral-code) {
+    font-size: 1.5rem !important;
+    font-weight: 800;
+    font-family: "Courier New", monospace;
+    color: #a5b4fc !important;
+    letter-spacing: 0.12em;
+    margin: 6px 0 8px !important;
+  }
+
+  .post-content :global(.ref-name) {
+    font-size: 0.85rem !important;
+    color: #9ca3af !important;
+    margin: 0 !important;
+  }
+
+  .post-content :global(.blog-deadline-banner) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(234, 179, 8, 0.08);
+    border: 1px solid rgba(234, 179, 8, 0.3);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 1.5rem 0;
+    font-size: 0.875rem;
+    color: #fde68a;
+    font-weight: 500;
+  }
+</style>

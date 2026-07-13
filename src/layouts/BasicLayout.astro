@@ -13,12 +13,25 @@ interface Props {
   page?: "travel" | "blog";
   slug?: string | undefined;
   pubDate?: string;
+  ogImage?: string;
+  keywords?: string;
   hideSoundToggle?: boolean;
   hideCal?: boolean;
 }
 
-const { title, description, page, pubDate, hideSoundToggle, hideCal } = Astro.props;
-const image = `${Astro.url.origin}/og-image.png`;
+const {
+  title,
+  description,
+  page,
+  pubDate,
+  ogImage,
+  keywords,
+  hideSoundToggle,
+  hideCal,
+} = Astro.props;
+const image = ogImage
+  ? `${Astro.url.origin}${ogImage}`
+  : `${Astro.url.origin}/og-image.png`;
 
 const schema =
   page !== "blog"
@@ -63,7 +76,7 @@ const schema =
         },
         headline: title || title,
         description: description || title,
-        image: `${Astro.url.origin}/og-image.png`, //TODO: dynamic
+        image: image,
         author: {
           "@type": "Person",
           name: SITE.author.shortName,
@@ -96,11 +109,7 @@ const schema =
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/apple-touch-icon.png"
-    />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="Mochammad Qaysa Al-Haq" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta content={Astro.generator} name="generator" />
@@ -111,7 +120,8 @@ const schema =
     <meta name="author" content={SITE.author.fullName} />
     <meta
       name="keywords"
-      content={`mobile developer, web developer, Laravel, Astro, Solid.js, Svelte, freelance developer, ${SITE.location.countryName}, UX, animations, micro-interactions`}
+      content={keywords ??
+        `mobile developer, web developer, Laravel, Astro, Solid.js, Svelte, freelance developer, ${SITE.location.countryName}, UX, animations, micro-interactions`}
     />
     <meta
       content={page === "blog" ? "article" : "website"}
@@ -157,52 +167,22 @@ const schema =
       async></script>
 
     <!-- Cal element-click embed code begins -->
-    {!hideCal && <script is:inline type="text/javascript">
-      (function (C, A, L) {
-        let p = function (a, ar) {
-          a.q.push(ar);
-        };
-        let d = C.document;
-        C.Cal =
-          C.Cal ||
-          function () {
-            let cal = C.Cal;
-            let ar = arguments;
-            if (!cal.loaded) {
-              cal.ns = {};
-              cal.q = cal.q || [];
-              d.head.appendChild(d.createElement("script")).src = A;
-              cal.loaded = true;
-            }
-            if (ar[0] === L) {
-              const api = function () {
-                p(api, arguments);
-              };
-              const namespace = ar[1];
-              api.q = api.q || [];
-              if (typeof namespace === "string") {
-                cal.ns[namespace] = cal.ns[namespace] || api;
-                p(cal.ns[namespace], ar);
-                p(cal, ["initNamespace", namespace]);
-              } else p(cal, ar);
-              return;
-            }
-            p(cal, ar);
-          };
-      })(window, "https://app.cal.com/embed/embed.js", "init");
-      const calNamespace =
-        document.documentElement.dataset.calNamespace || "15min";
-      const calOrigin =
-        document.documentElement.dataset.calOrigin || "https://cal.com";
-
-      Cal("init", calNamespace, { origin: calOrigin });
-
-      Cal.ns[calNamespace]("ui", {
-        styles: { branding: { brandColor: "#000000" } },
-        hideEventTypeDetails: false,
-        layout: "month_view",
-      });
-    </script>}
+    {
+      !hideCal && (
+        <script
+          is:inline
+          data-cal-init="true"
+          type="text/javascript"
+          set:html={`
+(function(C,A,L){let p=function(a,ar){a.q.push(ar)};let d=C.document;C.Cal=C.Cal||function(){let cal=C.Cal;let ar=arguments;if(!cal.loaded){cal.ns={};cal.q=cal.q||[];d.head.appendChild(d.createElement('script')).src=A;cal.loaded=true}if(ar[0]===L){const api=function(){p(api,arguments)};const namespace=ar[1];api.q=api.q||[];if(typeof namespace==='string'){cal.ns[namespace]=cal.ns[namespace]||api;p(cal.ns[namespace],ar);p(cal,['initNamespace',namespace])}else p(cal,ar);return}p(cal,ar)}})(window,'https://app.cal.com/embed/embed.js','init');
+const calNamespace=document.documentElement.dataset.calNamespace||'15min';
+const calOrigin=document.documentElement.dataset.calOrigin||'https://cal.com';
+Cal('init',calNamespace,{origin:calOrigin});
+Cal.ns[calNamespace]('ui',{styles:{branding:{brandColor:'#000000'}},hideEventTypeDetails:false,layout:'month_view'});
+          `}
+        />
+      )
+    }
     <!-- Cal element-click embed code ends -->
   </head>
   <body class="bg-darkslate-700 flex flex-col justify-center items-center">
