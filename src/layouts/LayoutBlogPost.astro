@@ -2,11 +2,13 @@
 import { formatDate } from "../lib/helpers";
 import BackLink from "../components/BackLink.astro";
 import BasicLayout from "./BasicLayout.astro";
+import { SITE } from "../site-config";
 
 type HeroImage = { src: string; alt: string };
 
 type Props = {
   title: string;
+  titleEn?: string;
   description: string;
   pubDate: Date;
   minutesRead: string;
@@ -15,10 +17,12 @@ type Props = {
   keywords?: string;
   heroImages?: HeroImage[];
   tags?: string[];
+  hasTranslation?: boolean;
 };
 
 const {
   title,
+  titleEn,
   description,
   pubDate,
   minutesRead,
@@ -27,15 +31,17 @@ const {
   keywords,
   heroImages = [],
   tags = [],
+  hasTranslation = false,
 } = Astro.props;
 const hasGallery = heroImages.length > 0;
+const pageTitle = `${title} | ${SITE.author.fullName}`;
 ---
 
 <BasicLayout
   description={description}
   page="blog"
   slug={url}
-  title={title}
+  title={pageTitle}
   ogImage={ogImage}
   keywords={keywords}
   pubDate={pubDate.toISOString()}
@@ -70,10 +76,44 @@ const hasGallery = heroImages.length > 0;
 
     <!-- Post Header -->
     <div class="mt-8 mb-8">
-      <h1 class="post-title">{title}</h1>
+      <h1 class="post-title">
+        {
+          hasTranslation && titleEn ? (
+            <>
+              <span class="lang-block" data-lang="id">
+                {title}
+              </span>
+              <span class="lang-block" data-lang="en" hidden>
+                {titleEn}
+              </span>
+            </>
+          ) : (
+            title
+          )
+        }
+      </h1>
       <div class="post-meta">
         <span>{formatDate(pubDate)}</span>
-        <span>{minutesRead}</span>
+        <div class="post-meta-right">
+          <span>{minutesRead}</span>
+          {
+            hasTranslation && (
+              <div
+                class="lang-toggle"
+                id="lang-toggle"
+                aria-label="Switch language"
+              >
+                <button class="lang-btn active" data-lang="id" id="btn-id">
+                  ID
+                </button>
+                <button class="lang-btn" data-lang="en" id="btn-en">
+                  EN
+                </button>
+                <div class="lang-slider" id="lang-slider" />
+              </div>
+            )
+          }
+        </div>
       </div>
       {
         tags.length > 0 && (
@@ -166,11 +206,71 @@ const hasGallery = heroImages.length > 0;
 
   .post-meta {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     font-size: 0.82rem;
     color: #64748b;
     padding-top: 4px;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .post-meta-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* ── Language Toggle ─────────────────────────────── */
+  .lang-toggle {
+    position: relative;
+    display: inline-flex;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+    padding: 2px;
+    gap: 0;
+    cursor: pointer;
+  }
+
+  .lang-btn {
+    position: relative;
+    z-index: 1;
+    padding: 2px 10px;
+    border-radius: 9999px;
+    border: none;
+    background: transparent;
+    color: #64748b;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    line-height: 1.6;
+  }
+
+  .lang-btn.active {
+    color: #f1f5f9;
+  }
+
+  .lang-slider {
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    left: 2px;
+    width: calc(50% - 2px);
+    background: var(--primary-500, #e63946);
+    border-radius: 9999px;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+  }
+
+  .lang-slider.en {
+    transform: translateX(100%);
+  }
+
+  /* ── Lang block visibility ───────────────────────── */
+  :global(.lang-block[hidden]) {
+    display: none !important;
   }
 
   .post-tags {
@@ -369,3 +469,59 @@ const hasGallery = heroImages.length > 0;
     font-weight: 500;
   }
 </style>
+
+<script>
+  function initLangToggle() {
+    const toggle = document.getElementById("lang-toggle");
+    if (!toggle) return; // page has no translation
+
+    const btnId = document.getElementById("btn-id") as HTMLButtonElement | null;
+    const btnEn = document.getElementById("btn-en") as HTMLButtonElement | null;
+    const slider = document.getElementById("lang-slider");
+
+    if (!btnId || !btnEn || !slider) return;
+
+    // Read saved preference (default: "id")
+    let currentLang = localStorage.getItem("blogLang") || "id";
+
+    function applyLang(lang: string) {
+      currentLang = lang;
+      localStorage.setItem("blogLang", lang);
+
+      // Toggle slider
+      slider!.classList.toggle("en", lang === "en");
+
+      // Toggle active button
+      btnId!.classList.toggle("active", lang === "id");
+      btnEn!.classList.toggle("active", lang === "en");
+
+      // Show/hide lang-block elements
+      document.querySelectorAll<HTMLElement>(".lang-block").forEach((el) => {
+        const elLang = el.dataset.lang;
+        if (elLang === lang) {
+          el.removeAttribute("hidden");
+        } else {
+          el.setAttribute("hidden", "");
+        }
+      });
+    }
+
+    // Apply immediately on load
+    applyLang(currentLang);
+
+    // Clone to remove stale listeners (Astro page transitions)
+    const newBtnId = btnId.cloneNode(true) as HTMLButtonElement;
+    const newBtnEn = btnEn.cloneNode(true) as HTMLButtonElement;
+    btnId.replaceWith(newBtnId);
+    btnEn.replaceWith(newBtnEn);
+
+    newBtnId.addEventListener("click", () => applyLang("id"));
+    newBtnEn.addEventListener("click", () => applyLang("en"));
+  }
+
+  // Run on first load
+  initLangToggle();
+
+  // Re-run after Astro view transitions
+  document.addEventListener("astro:page-load", initLangToggle);
+</script>

@@ -1,9 +1,12 @@
 ---
 title: "Google Skills Arcade 2026 Resmi Dibuka — Daftar Sekarang, Gratis!"
+titleEn: "Google Skills Arcade 2026 Is Now Open — Register for Free!"
 description: "Pendaftaran Google Skills Arcade Fasilitator 2026 resmi dibuka hari ini, 13 Juli 2026. Program beasiswa gratis dari Google Cloud x Dicoding untuk belajar Cloud Computing, AI, dan Machine Learning dengan konsep gamifikasi. Kuota terbatas, first come first served!"
+descriptionEn: "Google Skills Arcade Facilitator 2026 registration officially opens today, July 13, 2026. A free scholarship program from Google Cloud x Dicoding to learn Cloud Computing, AI, and Machine Learning through gamification. Limited slots, first come first served!"
 pubDate: 2026-07-13
 category: "google-cloud"
 draft: false
+hasTranslation: true
 ogImage: "/blog/arcade1.jpg"
 keywords: "Google Skills Arcade 2026, Google Cloud, Dicoding, beasiswa gratis, Cloud Computing, Artificial Intelligence, Machine Learning, Data Engineering, gamifikasi, GCAF26, fasilitator, badge keahlian, merchandise Google"
 tags:
@@ -25,6 +28,9 @@ heroImages:
   - src: "/blog/arcade5.jpg"
     alt: "Kuota terbatas! Pendaftaran 13 Juli hingga 14 September 2026 — first come first served"
 ---
+
+<!-- ══ BAHASA INDONESIA ══════════════════════════════════ -->
+<div class="lang-block" data-lang="id">
 
 <div class="blog-deadline-banner">
   ⏰ <strong>Pendaftaran: 13 Juli – 14 September 2026</strong> &nbsp;·&nbsp; Kuota Terbatas — First Come First Served!
@@ -71,8 +77,61 @@ Hanya butuh **15 menit** untuk mendaftar! Pastikan kamu sudah memenuhi ketiga sy
 
 Gunakan kode referral di bawah agar kita bisa terhubung di komunitas dan kamu mendapat bimbingan langsung:
 
+</div>
+
+<!-- ══ ENGLISH ════════════════════════════════════════════ -->
+<div class="lang-block" data-lang="en" hidden>
+
+<div class="blog-deadline-banner">
+  ⏰ <strong>Registration: July 13 – September 14, 2026</strong> &nbsp;·&nbsp; Limited Slots — First Come First Served!
+</div>
+
+## 🎮 New Quest Unlocked!
+
+Today, **July 13, 2026**, the **Google Skills Arcade Facilitator 2026** registration is officially open! This is a golden opportunity to _level up_ your skills in Cloud Computing, Artificial Intelligence, Machine Learning, and Data Engineering — **completely free** for all Indonesian citizens.
+
+This program is a collaboration between **Google Cloud** and **Dicoding**, packaged with an exciting **gamification** concept. You don't need to be an _expert_ to start — just play, complete _challenges_, collect badges, and claim your rewards!
+
+---
+
+## 🕹️ What is Google Skills Arcade Facilitator?
+
+A **free scholarship program** from Google Cloud that lets you learn the latest tech topics through a gamification approach. It's simple:
+
+- ✅ Complete _challenges_ and _milestones_
+- ✅ Collect official **Skill Badges** and **Arcade Points** from Google
+- ✅ Claim exciting rewards from Google Cloud
+
+---
+
+## 🎁 What You'll Get
+
+- 🏆 Official **Skill Badges + Arcade Points** from Google Skills — perfect to show off on LinkedIn or your resume!
+- 🛍️ **Redeem your points** for exclusive Google Skills Arcade merchandise
+- 👨‍🏫 **Guided directly** by Selected Facilitators
+- 👥 **Community group access** with thousands of participants across Indonesia
+
+---
+
+## ✅ 3 Requirements Before Registering
+
+You only need **15 minutes** to register! Make sure you meet all three of these requirements:
+
+1. **Indonesian citizen (WNI)**, minimum age 18
+2. Have an active **Google Skills account**
+3. Have registered for the **GEAR program** and obtained a **GEAR Badge** on your Google Developer Profile
+
+---
+
+## 🚀 Register Now via My Referral Code
+
+Use the referral code below so we can connect in the community and you receive direct guidance:
+
+</div>
+
+<!-- ══ SHARED (CTA – shown in both languages) ════════════ -->
 <div class="blog-referral-box">
-  <p class="ref-label">Kode Guild / Referral Fasilitator</p>
+  <p class="ref-label">Kode Guild / Referral Fasilitator · Facilitator Referral Code</p>
   <p class="blog-referral-code">GCAF26-ID-R7Q-TYT</p>
   <p class="ref-name">👤 Fasilitator: <strong>Mochammad Qaysa Al-Haq</strong></p>
 </div>
@@ -85,9 +144,14 @@ Gunakan kode referral di bawah agar kita bisa terhubung di komunitas dan kamu me
     rel="noopener noreferrer"
   >
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-    <span>Daftar Google Skills Arcade 2026</span>
+    <span class="lang-block" data-lang="id">Daftar Google Skills Arcade 2026</span>
+    <span class="lang-block" data-lang="en" hidden>Register for Google Skills Arcade 2026</span>
   </a>
-  <p class="blog-cta-note">Gratis · Kuota terbatas · Tutup 14 September 2026</p>
+  <p class="blog-cta-note">
+    <span class="lang-block" data-lang="id">Gratis · Kuota terbatas · Tutup 14 September 2026</span>
+    <span class="lang-block" data-lang="en" hidden>Free · Limited slots · Closes September 14, 2026</span>
+  </p>
 </div>
 
-_#GoogleSkillsArcade #Dicoding #GoogleCloud #CloudComputing #ArtificialIntelligence #MachineLearning #DataEngineering #BelajarGratis #ArcadeFasilitator2026_
+<em class="lang-block" data-lang="id">#GoogleSkillsArcade #Dicoding #GoogleCloud #CloudComputing #ArtificialIntelligence #MachineLearning #DataEngineering #BelajarGratis #ArcadeFasilitator2026</em>
+<em class="lang-block" data-lang="en" hidden>#GoogleSkillsArcade #Dicoding #GoogleCloud #CloudComputing #ArtificialIntelligence #MachineLearning #DataEngineering #FreeScholarship #ArcadeFacilitator2026</em>
