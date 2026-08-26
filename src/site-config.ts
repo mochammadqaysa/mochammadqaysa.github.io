@@ -17,7 +17,7 @@ export const SITE = {
     github: "https://github.com/mochammadqaysa",
     linkedin: "https://www.linkedin.com/in/mochammadqaysaalhaq/",
     medium: "https://mochammadqaysa.medium.com/",
-    instagram: "https://instagram.com/mochammadqaysa/",
+    instagram: "https://instagram.com/",
     email: "qaysa78@gmail.com",
   },
   cal: {
@@ -25,7 +25,5 @@ export const SITE = {
     durationNamespace: "15min",
     origin: "https://cal.com",
   },
-  visitedCountries: [
-    "Indonesia",
-  ],
+  visitedCountries: ["Indonesia"],
 };

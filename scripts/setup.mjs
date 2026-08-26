@@ -25,7 +25,7 @@ const defaults = {
     github: "https://github.com/mochammadqaysa",
     linkedin: "https://www.linkedin.com/in/mochammadqaysaalhaq/",
     medium: "https://mochammadqaysa.medium.com/",
-    instagram: "https://instagram.com/mochammadqaysa/",
+    instagram: "https://instagram.com/",
     email: "qaysa78@gmail.com",
   },
   cal: {
