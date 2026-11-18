@@ -1,12 +1,10 @@
 ---
-import { getCurrentTimeInTimezone, formatTimeTo12H } from "../lib/helpers";
+import { formatTimeTo12H } from "../lib/helpers";
 import Card from "./Card/index.astro";
 import { SITE } from "../site-config";
 ---
 
 <script>
-  import { getCurrentTimeInTimezone } from "../lib/helpers";
-
   let interval: ReturnType<typeof setInterval>;
   let homeTimezone = "";
   let use24HourOverride: boolean | null = null;
@@ -57,13 +55,11 @@ import { SITE } from "../site-config";
     visitorTimezone: string,
   ): string {
     const now = new Date();
-    const toMins = (tz: string) => {
-      const d = new Date(now.toLocaleString("en-US", { timeZone: tz }));
-      return d.getHours() * 60 + d.getMinutes();
-    };
-    let diff = toMins(homeTimezone) - toMins(visitorTimezone);
-    if (diff > 720) diff -= 1440;
-    if (diff < -720) diff += 1440;
+    const getTzTime = (tz: string) =>
+      new Date(now.toLocaleString("en-US", { timeZone: tz })).getTime();
+    const diff = Math.round(
+      (getTzTime(homeTimezone) - getTzTime(visitorTimezone)) / 60000,
+    );
 
     if (diff === 0) return "same timezone";
     const abs = Math.abs(diff);
@@ -98,25 +94,24 @@ import { SITE } from "../site-config";
     if (!homeTimezone) homeTimezone = getHomeTimezoneFromDom() || "UTC";
 
     const visitorTimezone = getVisitorTimezone();
-    const homeTime = getCurrentTimeInTimezone(homeTimezone);
-    const visitorTime = getCurrentTimeInTimezone(visitorTimezone);
+    const now = new Date();
     const use24Hour = uses24HourFormat();
 
     if (italyTimeDisplay) {
       italyTimeDisplay.textContent = formatTimeForTimezone(
-        homeTime,
+        now,
         homeTimezone,
         use24Hour,
       );
-      italyTimeDisplay.setAttribute("datetime", homeTime.toISOString());
+      italyTimeDisplay.setAttribute("datetime", now.toISOString());
     }
     if (visitorTimeDisplay) {
       visitorTimeDisplay.textContent = formatTimeForTimezone(
-        visitorTime,
+        now,
         visitorTimezone,
         use24Hour,
       );
-      visitorTimeDisplay.setAttribute("datetime", visitorTime.toISOString());
+      visitorTimeDisplay.setAttribute("datetime", now.toISOString());
     }
     if (visitorTzDisplay) {
       visitorTzDisplay.textContent = getTimezoneAbbreviation(visitorTimezone);
@@ -174,7 +169,7 @@ import { SITE } from "../site-config";
         id="italyTimeDisplay"
         class="whitespace-nowrap text-2xl font-bold tabular-nums leading-tight md:text-[clamp(2.5rem,5vw,4rem)] lg:text-[clamp(1.5rem,2vw,2.5rem)]"
       >
-        {formatTimeTo12H(getCurrentTimeInTimezone(SITE.location.timezone))}
+        {formatTimeTo12H(new Date(), SITE.location.timezone)}
       </time>
       <div class="flex items-center gap-1 text-[10px] text-darkslate-300">
         <span id="homeTzDisplay" data-timezone={SITE.location.timezone}
@@ -208,7 +203,7 @@ import { SITE } from "../site-config";
         id="visitorTimeDisplay"
         class="whitespace-nowrap text-2xl font-bold tabular-nums leading-tight md:text-[clamp(2.5rem,5vw,4rem)] lg:text-[clamp(1.5rem,2vw,2.5rem)]"
       >
-        {formatTimeTo12H(getCurrentTimeInTimezone(SITE.location.timezone))}
+        {formatTimeTo12H(new Date(), SITE.location.timezone)}
       </time>
       <span id="visitorTzDisplay" class="text-[10px] text-darkslate-300"
         >---</span
